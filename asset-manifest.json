@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-face-detection/static/css/main.b1319cec.css",
+    "main.js": "/react-face-detection/static/js/main.de3020df.js",
+    "index.html": "/react-face-detection/index.html",
+    "main.b1319cec.css.map": "/react-face-detection/static/css/main.b1319cec.css.map",
+    "main.de3020df.js.map": "/react-face-detection/static/js/main.de3020df.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b1319cec.css",
+    "static/js/main.de3020df.js"
+  ]
+}
