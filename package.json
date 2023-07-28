@@ -1,6 +1,7 @@
 {
   "name": "react-face-detection",
   "version": "0.1.0",
+  "homepage": "https://dmitriyshkredov.github.io/react-face-detection",
   "private": true,
   "dependencies": {
     "@tensorflow-models/facemesh": "^0.0.5",
