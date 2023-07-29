@@ -174,7 +174,7 @@ const drawPath = (ctx, points, closePath) => {
     region.lineTo(point[0], point[1]);
   }
   if (closePath) region.closePath();
-  ctx.strokeStyle = "white";
+  ctx.strokeStyle = "#a4d6f275";
   ctx.stroke(region);
 };
 
@@ -199,7 +199,7 @@ export const drawMesh = (points, ctx) => {
         const y = keypoints[i][1];
         ctx.beginPath();
         ctx.arc(x, y, 1, 0, 3 * Math.PI);
-        ctx.fillStyle = "white";
+        ctx.fillStyle = "#a4d6f275";
         ctx.fill();
       }
     });
