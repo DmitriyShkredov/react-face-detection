@@ -1,52 +1,46 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as facemesh from "@tensorflow-models/facemesh";
 import Webcam from "react-webcam";
 import { drawMesh } from "./helper";
+import { config, dtConfig } from "./config";
 import "./App.css";
 
-const config = {
-  width: 640,
-  height: 640,
-  facingMode: "user",
-};
-
-function App() {
+export const App = () => {
+  const [isEnabled, setEnabled] = useState(false);
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
-  const detect = async (net) => {
-    if (webcamRef.current && webcamRef.current.video.readyState === 4) {
-      const video = webcamRef.current.video;
-      const canvas = canvasRef.current;
-
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-
-      const face = await net.estimateFaces(video);
-      const ctx = canvas.getContext("2d");
-      drawMesh(face, ctx);
-    }
-  };
-
-  const runFacemesh = async () => {
-    const net = await facemesh.load({
-      inputResolution: { width: 640, height: 640 },
-      scale: 0.8,
-    });
-    setInterval(() => detect(net), 50);
+  const runDetector = async () => {
+    const detector = await facemesh.load(dtConfig);
+    const detect = async (net) => {
+      if (webcamRef.current && webcamRef.current.video.readyState === 4) {
+        canvasRef.current.width = webcamRef.current.video.videoWidth;
+        canvasRef.current.height = webcamRef.current.video.videoHeight;
+        const face = await net.estimateFaces(webcamRef.current.video);
+        const ctx = canvasRef.current.getContext("2d");
+        requestAnimationFrame(() => drawMesh(face, ctx));
+        detect(detector);
+      }
+    };
+    detect(detector);
   };
 
   useEffect(() => {
-    runFacemesh();
-  }, []);
+    setTimeout(() => runDetector(), 500);
+  }, [isEnabled]);
 
   return (
-    <div className="wrapper">
-      <Webcam videoConstraints={config} ref={webcamRef} />
-      <canvas width={config.width} height={config.height} ref={canvasRef} />
-    </div>
+    <>
+      {isEnabled && (
+        <>
+          <Webcam videoConstraints={config} ref={webcamRef} />
+          <canvas width={config.width} height={config.height} ref={canvasRef} />
+        </>
+      )}
+      <button onClick={() => setEnabled(!isEnabled)}>
+        {isEnabled ? "On" : "Off"}
+      </button>
+    </>
   );
-}
-
-export default App;
+};
